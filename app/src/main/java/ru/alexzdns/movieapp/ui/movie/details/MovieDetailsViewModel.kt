@@ -11,21 +11,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.create
-import ru.alexzdns.movieapp.data.remote.MoviesLoader
-import ru.alexzdns.movieapp.data.remote.NetworkModule
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
+import ru.alexzdns.movieapp.domain.repository.MovieRepository
 import ru.alexzdns.movieapp.ui.navigation.destination.ID_KEY
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val repository: MovieRepository,
 ) : ViewModel() {
 
     private val movieId: Long = savedStateHandle.get<Long>(ID_KEY) ?: error("movieId must be not null")
-
-    private val moviesLoader = MoviesLoader(NetworkModule.retrofit.create())
 
     private val _uiState: MutableStateFlow<LoadableResult<Movie>> =
         MutableStateFlow(LoadableResult.Loading)
@@ -40,7 +37,7 @@ class MovieDetailsViewModel @Inject constructor(
             _uiState.value = LoadableResult.Loading
 
             try {
-                val movies = moviesLoader.loadMovieDetails(movieId)
+                val movies = repository.loadMovieDetails(movieId)
                 _uiState.value = LoadableResult.Success(movies)
             } catch (e: Exception) {
                 Log.e(this::class.simpleName, e.toString())

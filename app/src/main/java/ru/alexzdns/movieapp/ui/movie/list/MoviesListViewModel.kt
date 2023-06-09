@@ -10,15 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.create
-import ru.alexzdns.movieapp.data.remote.MoviesLoader
-import ru.alexzdns.movieapp.data.remote.NetworkModule
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
+import ru.alexzdns.movieapp.domain.repository.MovieRepository
 
 @HiltViewModel
-class MoviesListViewModel @Inject constructor() : ViewModel() {
-    private val moviesLoader = MoviesLoader(NetworkModule.retrofit.create())
+class MoviesListViewModel @Inject constructor(
+    private val repository: MovieRepository,
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<LoadableResult<List<Movie>>> =
         MutableStateFlow(LoadableResult.Loading)
@@ -33,7 +32,7 @@ class MoviesListViewModel @Inject constructor() : ViewModel() {
             _uiState.value = LoadableResult.Loading
 
             try {
-                val movies = moviesLoader.loadMoviesFromServer()
+                val movies = repository.loadMoviesFromServer()
                 _uiState.value = LoadableResult.Success(movies)
             } catch (e: Exception) {
                 Log.e(this::class.simpleName, e.toString())
