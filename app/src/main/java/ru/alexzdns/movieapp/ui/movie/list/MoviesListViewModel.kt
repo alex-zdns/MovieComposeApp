@@ -3,7 +3,9 @@ package ru.alexzdns.movieapp.ui.movie.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.lang.Exception
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +16,8 @@ import ru.alexzdns.movieapp.data.remote.NetworkModule
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
 
-class MoviesListViewModel : ViewModel() {
+@HiltViewModel
+class MoviesListViewModel @Inject constructor() : ViewModel() {
     private val moviesLoader = MoviesLoader(NetworkModule.retrofit.create())
 
     private val _uiState: MutableStateFlow<LoadableResult<List<Movie>>> =

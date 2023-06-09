@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
 import ru.alexzdns.movieapp.ui.components.ErrorComponents
@@ -18,7 +18,7 @@ import ru.alexzdns.movieapp.ui.components.LoaderComponents
 
 @Composable
 fun MovieListScreen(
-    viewModel: MoviesListViewModel = viewModel(),
+    viewModel: MoviesListViewModel = hiltViewModel(),
     onMovieClick: (Long) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()

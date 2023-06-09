@@ -8,7 +8,7 @@ import androidx.navigation.navArgument
 import ru.alexzdns.movieapp.ui.movie.details.MovieDetailsScreen
 
 private const val BASE_ROUTE = "movieDetails"
-private const val ID_KEY = "id"
+const val ID_KEY = "id"
 
 fun NavGraphBuilder.movieDetails() {
     composable(

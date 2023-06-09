@@ -3,14 +3,14 @@ package ru.alexzdns.movieapp.ui.movie.details
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
 import ru.alexzdns.movieapp.ui.components.ErrorComponents
 import ru.alexzdns.movieapp.ui.components.LoaderComponents
 
 @Composable
-fun MovieDetailsScreen(viewModel: MovieDetailsViewModel = viewModel()) {
+fun MovieDetailsScreen(viewModel: MovieDetailsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
