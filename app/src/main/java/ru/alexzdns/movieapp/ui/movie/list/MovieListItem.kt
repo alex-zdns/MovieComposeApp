@@ -3,6 +3,7 @@ package ru.alexzdns.movieapp.ui.movie.list
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -26,8 +27,16 @@ import ru.alexzdns.movieapp.domain.models.Movie
 import ru.alexzdns.movieapp.ui.components.RatingView
 
 @Composable
-fun MovieListItem(movie: Movie, modifier: Modifier = Modifier) {
-    Column(modifier.background(Color.White.copy(alpha = 0.3f))) {
+fun MovieListItem(
+    movie: Movie,
+    onMovieClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier
+            .background(Color.White.copy(alpha = 0.3f))
+            .clickable { onMovieClick.invoke(movie.id) },
+    ) {
         AsyncImage(
             model = movie.poster,
             contentDescription = null,
@@ -55,7 +64,8 @@ fun MovieListItem(movie: Movie, modifier: Modifier = Modifier) {
         Box(
             Modifier
                 .padding(top = 10.dp)
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             RatingView(
                 rating = movie.ratings.toInt(),
                 Modifier

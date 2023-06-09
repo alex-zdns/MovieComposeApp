@@ -17,7 +17,10 @@ import ru.alexzdns.movieapp.ui.components.ErrorComponents
 import ru.alexzdns.movieapp.ui.components.LoaderComponents
 
 @Composable
-fun MovieListScreen(viewModel: MoviesListViewModel = viewModel()) {
+fun MovieListScreen(
+    viewModel: MoviesListViewModel = viewModel(),
+    onMovieClick: (Long) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -38,7 +41,10 @@ fun MovieListScreen(viewModel: MoviesListViewModel = viewModel()) {
                 ),
                 content = {
                     items(movies.size) { index ->
-                        MovieListItem(movie = movies[index], Modifier.fillMaxWidth())
+                        MovieListItem(
+                            movie = movies[index],
+                            onMovieClick = onMovieClick,
+                            modifier = Modifier.fillMaxWidth())
                     }
                 }
             )

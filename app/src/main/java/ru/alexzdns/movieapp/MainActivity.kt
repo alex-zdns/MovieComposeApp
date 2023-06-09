@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import ru.alexzdns.movieapp.ui.movie.details.MovieDetailsScreen
+import ru.alexzdns.movieapp.ui.navigation.MovieAppNavigation
 import ru.alexzdns.movieapp.ui.theme.MovieComposeAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,8 +22,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //MovieListScreen()
-                    MovieDetailsScreen()
+                    val navController = rememberNavController()
+
+                    MovieAppNavigation(navController)
                 }
             }
         }
