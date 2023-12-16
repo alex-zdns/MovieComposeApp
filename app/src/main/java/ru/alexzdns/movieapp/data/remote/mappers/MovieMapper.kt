@@ -8,7 +8,7 @@ import ru.alexzdns.movieapp.data.remote.models.ApiMovieDetails
 import ru.alexzdns.movieapp.domain.models.Movie
 
 class MovieMapper @Inject constructor() {
-    fun fromApiModel(apiModel: ApiMovie, genres: Map<Int, ApiGenre>) = Movie(
+    fun fromApiModel(apiModel: ApiMovie, genres: Map<Int, String>) = Movie(
         id = apiModel.id,
         title = apiModel.title,
         overview = apiModel.overview,
@@ -16,7 +16,7 @@ class MovieMapper @Inject constructor() {
         backdrop = BuildConfig.IMAGE_BASE_URL + BuildConfig.BACKDROP_SIZES_PATCH + apiModel.backdropPath,
         ratings = apiModel.voteAverage / 2.0f,
         numberOfRatings = apiModel.voteCount,
-        genres = apiModel.genresIds.mapNotNull { genres[it]?.name },
+        genres = apiModel.genresIds.mapNotNull { genres[it] },
         isAdult = apiModel.adult
     )
 

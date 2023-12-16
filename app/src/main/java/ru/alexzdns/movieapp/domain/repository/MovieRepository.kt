@@ -3,18 +3,22 @@ package ru.alexzdns.movieapp.domain.repository
 import javax.inject.Inject
 import ru.alexzdns.movieapp.data.remote.MovieApi
 import ru.alexzdns.movieapp.data.remote.mappers.MovieMapper
+import ru.alexzdns.movieapp.data.remote.mappers.MoviesPageMapper
 import ru.alexzdns.movieapp.domain.models.Movie
+import ru.alexzdns.movieapp.domain.models.MoviesPage
 
 class MovieRepository @Inject constructor(
     private val movieApi: MovieApi,
     private val movieMapper: MovieMapper,
+    private val moviesPageMapper: MoviesPageMapper,
 ) {
-    suspend fun loadMoviesFromServer(): List<Movie> {
-        val genresMap = movieApi.getGenres().genres.associateBy { it.id }
+    suspend fun loadMoviesFromServer(page: Int, genresMap: Map<Int, String>): MoviesPage {
+        val moviesPage = movieApi.getMovieList(page = page)
+        return moviesPageMapper.fromApiModel(moviesPage, genresMap)
+    }
 
-        val moviesDto = movieApi.getMovieList().movies
-
-        return moviesDto.map { movieMapper.fromApiModel(it, genresMap) }
+    suspend fun loadGenres(): Map<Int, String> {
+        return movieApi.getGenres().genres.associateBy({ it.id }, { it.name })
     }
 
     suspend fun loadMovieDetails(movieId: Long): Movie {

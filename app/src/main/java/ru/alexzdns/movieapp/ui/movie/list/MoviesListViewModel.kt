@@ -3,6 +3,8 @@ package ru.alexzdns.movieapp.ui.movie.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.lang.Exception
 import javax.inject.Inject
@@ -10,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.alexzdns.movieapp.data.paging.MoviePagingSource
 import ru.alexzdns.movieapp.domain.models.LoadableResult
 import ru.alexzdns.movieapp.domain.models.Movie
 import ru.alexzdns.movieapp.domain.repository.MovieRepository
@@ -19,15 +22,19 @@ class MoviesListViewModel @Inject constructor(
     private val repository: MovieRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<LoadableResult<List<Movie>>> =
+/*    private val _uiState: MutableStateFlow<LoadableResult<List<Movie>>> =
         MutableStateFlow(LoadableResult.Loading)
-    val uiState: StateFlow<LoadableResult<List<Movie>>> = _uiState.asStateFlow()
+    val uiState: StateFlow<LoadableResult<List<Movie>>> = _uiState.asStateFlow()*/
 
-    init {
+    val movieFlow = Pager(PagingConfig(20)) {
+        MoviePagingSource(repository)
+    }.flow
+
+/*    init {
         loadData()
-    }
+    }*/
 
-    fun loadData() {
+/*    fun loadData() {
         viewModelScope.launch {
             _uiState.value = LoadableResult.Loading
 
@@ -39,5 +46,5 @@ class MoviesListViewModel @Inject constructor(
                 _uiState.value = LoadableResult.Failure(e)
             }
         }
-    }
+    }*/
 }

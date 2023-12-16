@@ -12,5 +12,8 @@ data class ApiMovies(
     val movies: List<ApiMovie>,
 
     @SerialName("total_pages")
-    val totalPages: Int
+    val totalPages: Int,
+
+    @SerialName("total_results")
+    val totalResults: Int,
 )
