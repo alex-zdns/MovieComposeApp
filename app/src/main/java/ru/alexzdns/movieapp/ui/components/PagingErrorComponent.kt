@@ -13,16 +13,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.alexzdns.movieapp.R
 
 @Composable
 fun PagingErrorComponent(
     refreshAction: () -> Unit = {},
 ) {
-    Surface(Modifier.fillMaxWidth().height(200.dp)) {
+    Surface(
+        Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
         Box(contentAlignment = Alignment.Center) {
-            Text(text = "Упс, ошибка")
+            Text(text = stringResource(id = R.string.error_message))
 
             Button(
                 onClick = { refreshAction.invoke() },
@@ -30,7 +36,7 @@ fun PagingErrorComponent(
                     .align(Alignment.BottomCenter)
                     .padding(24.dp)
             ) {
-                Text(text = "Обновить")
+                Text(text = stringResource(id = R.string.error_button))
                 Icon(
                     imageVector = Icons.Filled.Refresh,
                     contentDescription = "",

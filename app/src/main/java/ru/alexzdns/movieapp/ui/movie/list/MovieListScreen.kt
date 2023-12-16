@@ -9,10 +9,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import ru.alexzdns.movieapp.R
 import ru.alexzdns.movieapp.ui.components.ErrorComponents
 import ru.alexzdns.movieapp.ui.components.LoaderComponents
 import ru.alexzdns.movieapp.ui.components.PagingErrorComponent
@@ -32,8 +34,9 @@ fun MovieListScreen(
         is LoadState.Error -> ErrorComponents(lazyPagingItems::retry)
         LoadState.Loading -> LoaderComponents()
         is LoadState.NotLoading -> {
+            val spanCount = integerResource(id = R.integer.movies_list_span)
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Fixed(spanCount),
                 verticalArrangement = Arrangement.spacedBy(50.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
 
@@ -54,7 +57,7 @@ fun MovieListScreen(
                             )
                         }
                     }
-                    item(span = { GridItemSpan(2) }) {
+                    item(span = { GridItemSpan(spanCount) }) {
                         HandleFooter(lazyPagingItems.loadState.append, lazyPagingItems::retry)
                     }
                 }
