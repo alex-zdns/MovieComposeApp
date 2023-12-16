@@ -1,8 +1,10 @@
 package ru.alexzdns.movieapp.ui.movie.list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import ru.alexzdns.movieapp.data.paging.MoviePagingSource
@@ -15,5 +17,5 @@ class MoviesListViewModel @Inject constructor(
 
     val movieFlow = Pager(PagingConfig(20)) {
         MoviePagingSource(repository)
-    }.flow
+    }.flow.cachedIn(viewModelScope)
 }

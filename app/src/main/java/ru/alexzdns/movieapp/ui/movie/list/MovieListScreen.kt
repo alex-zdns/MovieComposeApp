@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -14,6 +15,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import ru.alexzdns.movieapp.ui.components.ErrorComponents
 import ru.alexzdns.movieapp.ui.components.LoaderComponents
+import ru.alexzdns.movieapp.ui.components.PagingErrorComponent
+import ru.alexzdns.movieapp.ui.components.PagingLoadingComponent
 
 @Composable
 fun MovieListScreen(
@@ -51,8 +54,20 @@ fun MovieListScreen(
                             )
                         }
                     }
+                    item(span = { GridItemSpan(2) }) {
+                        HandleFooter(lazyPagingItems.loadState.append, lazyPagingItems::retry)
+                    }
                 }
             )
         }
+    }
+}
+
+@Composable
+fun HandleFooter(state: LoadState, retry: () -> Unit) {
+    when (state) {
+        is LoadState.Error -> PagingErrorComponent(refreshAction = retry)
+        LoadState.Loading -> PagingLoadingComponent()
+        is LoadState.NotLoading -> Unit
     }
 }
