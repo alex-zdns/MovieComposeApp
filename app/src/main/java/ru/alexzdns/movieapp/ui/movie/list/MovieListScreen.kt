@@ -13,8 +13,10 @@ import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import ru.alexzdns.movieapp.R
+import ru.alexzdns.movieapp.domain.models.Movie
 import ru.alexzdns.movieapp.ui.components.ErrorComponents
 import ru.alexzdns.movieapp.ui.components.LoaderComponents
 import ru.alexzdns.movieapp.ui.components.PagingErrorComponent
@@ -29,41 +31,43 @@ fun MovieListScreen(
         viewModel.movieFlow
     }.collectAsLazyPagingItems()
 
-
     when (lazyPagingItems.loadState.refresh) {
         is LoadState.Error -> ErrorComponents(lazyPagingItems::retry)
         LoadState.Loading -> LoaderComponents()
-        is LoadState.NotLoading -> {
-            val spanCount = integerResource(id = R.integer.movies_list_span)
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(spanCount),
-                verticalArrangement = Arrangement.spacedBy(50.dp),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-
-                // content padding
-                contentPadding = PaddingValues(
-                    all = 20.dp,
-                ),
-                content = {
-                    items(lazyPagingItems.itemCount) { index ->
-
-                        val movie = lazyPagingItems[index]
-
-                        movie?.let {
-                            MovieListItem(
-                                movie = it,
-                                onMovieClick = onMovieClick,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-                    item(span = { GridItemSpan(spanCount) }) {
-                        HandleFooter(lazyPagingItems.loadState.append, lazyPagingItems::retry)
-                    }
-                }
-            )
-        }
+        is LoadState.NotLoading -> MovieListView(lazyPagingItems, onMovieClick)
     }
+}
+
+@Composable
+fun MovieListView(
+    lazyPagingItems: LazyPagingItems<Movie>,
+    onMovieClick: (Long) -> Unit,
+) {
+    val spanCount = integerResource(id = R.integer.movies_list_span)
+    LazyVerticalGrid(
+
+        columns = GridCells.Fixed(spanCount),
+        verticalArrangement = Arrangement.spacedBy(50.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PaddingValues(all = 20.dp,),
+        content = {
+            items(lazyPagingItems.itemCount) { index ->
+
+                val movie = lazyPagingItems[index]
+
+                movie?.let {
+                    MovieListItem(
+                        movie = it,
+                        onMovieClick = onMovieClick,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+            item(span = { GridItemSpan(spanCount) }) {
+                HandleFooter(lazyPagingItems.loadState.append, lazyPagingItems::retry)
+            }
+        }
+    )
 }
 
 @Composable
